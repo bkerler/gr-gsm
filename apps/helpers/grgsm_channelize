@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # @file
 # @author (C) 2015 by Pieter Robyns <pieter.robyns@uhasselt.be>
@@ -87,14 +87,14 @@ class grgsm_channelize(gr.top_block):
             self.source = blocks.file_source(gr.sizeof_gr_complex, input_file, False)
 
         fc_str = eng_notation.num_to_str(fc)
-        print("Extracting channels %s, given that the center frequency is at %s" % (str(arfcns), eng_notation.num_to_str(fc)))
+        print(("Extracting channels %s, given that the center frequency is at %s" % (str(arfcns), eng_notation.num_to_str(fc))))
 
         for channel in self.arfcns:
             channel_freq = arfcn.arfcn2downlink(channel)
             freq_diff = channel_freq - fc
             freq_diff_str = "+" if 0 <= freq_diff else ""
             freq_diff_str += eng_notation.num_to_str(freq_diff)
-            print("ARFCN %d is at %sHz %sHz" % (channel, fc_str, freq_diff_str))
+            print(("ARFCN %d is at %sHz %sHz" % (channel, fc_str, freq_diff_str)))
 
             self.blocks_resamplers[channel] = pfb.arb_resampler_ccf( resamp_rate, taps=None, flt_size=32)
             self.blocks_rotators[channel] = blocks.rotator_cc(-2*math.pi*(freq_diff)/samp_rate)
@@ -145,9 +145,9 @@ if __name__ == '__main__':
         raise Exception("Input sample rate should be multiple of output sample rate in order to get integer decimation.")
 
     resamp_rate = args.out_samp_rate / args.samp_rate
-    print("Input sample rate: " + eng_notation.num_to_str(args.samp_rate))
-    print("Output sample rate: " + eng_notation.num_to_str(args.out_samp_rate))
-    print("==> using resample rate of " + str(resamp_rate))
+    print(("Input sample rate: " + eng_notation.num_to_str(args.samp_rate)))
+    print(("Output sample rate: " + eng_notation.num_to_str(args.out_samp_rate)))
+    print(("==> using resample rate of " + str(resamp_rate)))
 
     tb = grgsm_channelize(arfcns=args.arfcns,
          resamp_rate=resamp_rate,

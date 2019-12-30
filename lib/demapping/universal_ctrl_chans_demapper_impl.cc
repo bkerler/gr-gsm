@@ -128,6 +128,9 @@ namespace gr {
                 frame_numbers = d_downlink_frame_numbers;
                 bursts = d_downlink_bursts;
             }
+                      
+            uint32_t fn51_start = starts_fn_mod51[fn_mod51];
+            uint32_t fn51_stop = fn51_start + 3;
 
             //set type
             new_header->type = GSMTAP_TYPE_UM;
@@ -137,17 +140,8 @@ namespace gr {
             {
                 new_header->sub_type = ch_type;
             }
-            new_header->sub_slot = subslots[fn_mod102];
-
-            if (ch_type == GSMTAP_CHANNEL_RACH)
-            {
-                message_port_pub(pmt::mp("bursts"), burst_out);
-                return;
-            }
-
-            uint32_t fn51_start = starts_fn_mod51[fn_mod51];
-            uint32_t fn51_stop = fn51_start + 3;
-
+            new_header->sub_slot = subslots[fn_mod51 + (51 * (frame_nr % 2))];
+            
             if(fn_mod51>=fn51_start && fn_mod51<=fn51_stop)
             {
                 uint32_t ii = fn_mod51 - fn51_start;
